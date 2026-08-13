@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>С днём рождения</title>
+<link rel="stylesheet" href="style.css">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Экран 1: обложка -->
+<section id="cover" class="screen cover">
+  <!-- контейнер летающих эмодзи -->
+  <div class="floating" id="coverFloating"></div>
+  <div class="cover-content">
+    <div class="cover-emoji">🎁</div>
+    <h1>Для тебя</h1>
+    <p class="cover-subtitle">Тебя ждёт сюрприз...</p>
+    <button id="openBtn" class="open-btn">🎉 Открыть открытку</button>
+  </div>
+</section>
+
+<!-- Экран 2: открытка -->
+<section id="card" class="screen card hidden">
+  <!-- канвас для конфетти -->
+  <canvas id="confettiCanvas"></canvas>
+  <!-- контейнер летающих эмодзи -->
+  <div class="floating" id="cardFloating"></div>
+  <div class="card-inner">
+    <div class="cake">
+      <div class="candles">
+        <span class="candle"><i class="flame"></i></span>
+        <span class="candle"><i class="flame"></i></span>
+        <span class="candle"><i class="flame"></i></span>
+      </div>
+      <div class="tier tier-top">
+        <div class="frost"></div>
+        <span class="tier-number" id="age">23</span>
+      </div>
+      <div class="tier tier-mid">
+        <div class="frost"></div>
+        <div class="sprinkles"></div>
+      </div>
+      <div class="tier tier-bottom">
+        <div class="frost"></div>
+        <div class="sprinkles"></div>
+      </div>
+      <div class="plate"></div>
+    </div>
+    <h1 class="birthday-title">С днём рождения!</h1>
+    <h2 class="name" id="name">Анна</h2>
+    <p class="message" id="message"></p>
+    <p class="from" id="from"></p>
+  </div>
+</section>
+
+
+
+<script src="script.js"></script>
+</body>
+</html>

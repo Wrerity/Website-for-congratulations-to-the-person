@@ -1,0 +1,173 @@
+/* Открытка: розово-жёлтая тема, размеры тянутся под телефон */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: "Segoe UI", "Arial", sans-serif;
+  font-size: 14px;
+  background: linear-gradient(135deg, #ffd6e8, #ffe9b3 55%, #ffd166);
+  overflow: hidden;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .6s ease, transform .6s ease;
+}
+
+.hidden { opacity: 0; pointer-events: none; transform: scale(1.05); }
+
+/* Обложка */
+.cover {
+  background: linear-gradient(160deg, #ff9ff3, #ffd166);
+  text-align: center;
+  padding: 24px;
+}
+.cover-emoji { font-size: clamp(64px, 24vw, 96px); animation: bounce 2s infinite ease-in-out; }
+.cover h1 { font-size: 14px; color: #fff; text-shadow: 0 4px 12px rgba(255,105,180,.5); margin: 12px 0 8px; }
+.cover-subtitle { font-size: 14px; color: rgba(255,255,255,.95); margin-bottom: 30px; }
+.open-btn {
+  border: none; cursor: pointer;
+  font-size: 14px; font-weight: 700; color: #d6336c;
+  background: #fff; padding: 15px 38px; border-radius: 60px;
+  box-shadow: 0 8px 24px rgba(214,51,108,.35);
+  transition: transform .2s, box-shadow .2s;
+}
+.open-btn:active { transform: scale(.94); }
+
+/* Открытка */
+.card {
+  background: rgba(255,255,255,.5);
+  backdrop-filter: blur(4px);
+  overflow-y: auto;
+  padding: calc(20px + env(safe-area-inset-top)) 12px calc(20px + env(safe-area-inset-bottom));
+}
+#confettiCanvas { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; }
+
+.card-inner {
+  position: relative; z-index: 2;
+  width: 100%; max-width: 560px; margin: auto;
+  padding: clamp(26px, 6vw, 40px) clamp(18px, 5vw, 32px);
+  background: linear-gradient(145deg, #fff0f6, #fffdf5);
+  border-radius: 28px;
+  box-shadow: 0 24px 60px rgba(255,105,180,.35);
+  border: 2px solid #ffd6e8;
+  text-align: center;
+  animation: cardIn .8s ease;
+}
+
+/* Торт: 3 яруса и число */
+.cake {
+  position: relative;
+  width: 18em; height: 21em;
+  margin: 0 auto 10px;
+  font-size: clamp(10.5px, 2.7vmin, 15px);
+}
+.tier {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  border-radius: .55em;
+  box-shadow: inset 0 -0.5em 1.2em rgba(0,0,0,.12), 0 .3em .5em rgba(0,0,0,.12);
+}
+.tier-top    { bottom: 11.6em; width: 9em;  height: 5em;  background: linear-gradient(#fff3e0, #ffe0b2); }
+.tier-mid    { bottom: 6.2em;  width: 13em; height: 5.4em; background: linear-gradient(#ffd6a8, #ffb74d); }
+.tier-bottom { bottom: .6em;   width: 17em; height: 5.8em; background: linear-gradient(#ff9ff3, #ff6fb5); }
+
+.frost {
+  position: absolute; top: -.55em; left: .1em; right: .1em; height: 1em;
+  background: linear-gradient(#fff, #ffe9f1);
+  border-radius: .5em;
+  box-shadow: 0 1px 2px rgba(255,105,180,.25);
+}
+.frost::after {
+  content: "";
+  position: absolute; top: 100%; left: 0; right: 0; height: .9em;
+  background-image: radial-gradient(ellipse .34em .5em at .34em .05em, #fff 55%, #ffd6e8 90%, transparent);
+  background-size: 1.1em 1em; background-repeat: repeat-x;
+}
+
+.sprinkles {
+  position: absolute; inset: .4em 0 0; opacity: .7; pointer-events: none;
+  background-image:
+    radial-gradient(circle .09em at .3em .45em, #ff6fb5 98%, transparent),
+    radial-gradient(circle .08em at .9em .7em, #fff 98%, transparent),
+    radial-gradient(circle .09em at 1.5em .35em, #ffd166 98%, transparent),
+    radial-gradient(circle .08em at 2.1em .75em, #ff9ff3 98%, transparent),
+    radial-gradient(circle .09em at 2.7em .4em, #fff 98%, transparent),
+    radial-gradient(circle .08em at 3.3em .7em, #ff6fb5 98%, transparent);
+  background-size: 4em 1.2em; background-repeat: repeat-x;
+}
+.tier-mid .sprinkles { background-image: radial-gradient(circle .09em at .3em .45em, #e8590c 98%, transparent), radial-gradient(circle .08em at .9em .7em, #fff 98%, transparent), radial-gradient(circle .09em at 1.5em .35em, #ff6fb5 98%, transparent); }
+
+.tier-number {
+  position: absolute; left: 0; right: 0; top: 50%; transform: translateY(-50%);
+  font-family: "Pacifico", cursive;
+  font-size: 2.9em; line-height: 1; text-align: center;
+  color: #e8447c;
+  text-shadow: 0 .06em 0 #fff, 0 .15em .25em rgba(255,105,180,.45);
+  animation: twinkle 2.4s ease-in-out infinite;
+}
+
+/* Свечи */
+.candles {
+  position: absolute; bottom: 16.6em; left: 0; right: 0;
+  display: flex; justify-content: center; gap: 1.3em;
+}
+.candle {
+  position: relative;
+  width: .6em; height: 2.5em; border-radius: .15em;
+  background: repeating-linear-gradient(45deg, #ff6fb5 0 .32em, #fff .32em .64em);
+  box-shadow: 0 .15em .3em rgba(0,0,0,.15);
+}
+.candle::before {
+  content: ""; position: absolute; bottom: 2.35em; left: 50%;
+  width: .08em; height: .25em; background: #8a5a00; transform: translateX(-50%);
+}
+.flame {
+  position: absolute; top: -1.3em; left: 50%;
+  width: .7em; height: 1.05em; margin-left: -.35em;
+  background: radial-gradient(circle at 50% 80%, #fff7ae 0%, #ffd166 45%, #ff9f1c 80%, #f77f00 100%);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  box-shadow: 0 0 .5em .1em rgba(255,180,50,.6);
+  animation: flicker .6s ease-in-out infinite alternate;
+}
+
+.plate {
+  position: absolute; bottom: -.8em; left: 50%; transform: translateX(-50%);
+  width: 18.5em; height: 1.5em;
+  background: radial-gradient(ellipse at 50% 40%, #fff, #ffe3f0);
+  border-radius: 50%;
+  box-shadow: 0 .3em .8em rgba(214,51,108,.25);
+}
+
+/* Тексты */
+.birthday-title {
+  font-size: 14px; line-height: 1.4; margin-top: 14px;
+  background: linear-gradient(90deg, #ff6fb5, #ffb000, #ff6fb5);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent; animation: shimmer 4s linear infinite;
+}
+.name {
+  font-family: "Pacifico", cursive;
+  font-size: 14px;
+  color: #d6336c; margin: 6px 0 14px;
+}
+.message { font-size: 14px; line-height: 1.7; color: #6b4f2a; margin-bottom: 14px; }
+.from { font-style: italic; font-size: 14px; color: #d6336c; }
+
+/* Летающие эмодзи */
+.floating {
+  position: absolute; inset: 0; overflow: hidden;
+  pointer-events: none; z-index: 3;
+}
+.floating span {
+  position: absolute; bottom: -60px;
+  font-size: 30px; animation: rise linear infinite;
+  opacity: .9;
+}
+
+/* Анимации удалены: @keyframes вырезаны, свойства animation выше оставлены.
+   Верни keyframes bounce, shimmer, cardIn, flicker, twinkle, rise — и заработает. */
